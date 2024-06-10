@@ -1,18 +1,29 @@
 <template>
     <h2>Add Resources</h2>
+    <base-dialog v-if="inputIsInvalid" title="Invalid Input" @closeDialog="confirmError">
+        <!-- <template #header>
+            <p>Invalid!</p>
+        </template> -->
+        <template #default>
+            <p>At least one input is invalid!</p>
+        </template>
+        <template #buttonActions>
+            <base-button @click="confirmError">Okay</base-button>
+        </template>
+    </base-dialog>
     <base-card>
         <form @submit.prevent="submitAddNewResource">
             <div class="form-control">
                 <label for="title">Title</label>
-                <input type="text" id="title" name="title" v-model="title" ref="titleInput">    
+                <input type="text" id="title" name="title" v-model.trim="title" ref="titleInput">    
             </div>
             <div class="form-control">
                 <label for="description">Description</label>
-                <textarea type="text" id="description" name="description" v-model="description" ref="descriptionInput"></textarea>   
+                <textarea type="text" id="description" name="description" v-model.trim="description" ref="descriptionInput"></textarea>   
             </div>
             <div class="form-control">
                 <label for="link">Resource Link</label>
-                <input type="url" id="link" name="link" v-model="urlLink" ref="linkInput">    
+                <input type="url" id="link" name="link" v-model.trim="urlLink" ref="linkInput">    
             </div>
             <div>
                 <base-button type="submit">Add New Resource</base-button>
@@ -22,12 +33,15 @@
 </template>
 
 <script>
+import BaseButton from '../UI/BaseButton.vue';
 export default {
+  components: { BaseButton },
     data() {
         return {
             title: "",
             description: "",
             urlLink: "",
+            inputIsInvalid: false
         };
     },
     inject: ["addNewResource"],
@@ -37,13 +51,18 @@ export default {
             const descriptionInput = this.$refs.descriptionInput.value;
             const linkInput = this.$refs.linkInput.value;
 
+            if(titleInput === "" || descriptionInput === "" || linkInput === ""){
+                this.inputIsInvalid = true;
+                return;
+            }
+
             //assuming not empty
             this.addNewResource(titleInput, descriptionInput, linkInput);
 
                     //why is this highlighted red and giving undefined
                     // this.title = event.target.value;
                     // console.log(this.title);
-        }
+        },
         // addNewResource(title, description, urlLink) {
             //I had the right idea with this method but I implemented it in the wrong place. This should be in the parent where the data is actually stored and called from child. Hence I dont have to inject resources but the add resources method
         //     const newResource = {
@@ -55,6 +74,9 @@ export default {
         //     }
         //     this.resources.push(newResource);
         // },
+        confirmError () {
+            this.inputIsInvalid = false;
+        }
     }
 }
 </script>
