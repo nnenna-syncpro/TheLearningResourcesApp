@@ -36,12 +36,25 @@ export default {
     },
     provide () {
         return {
-            resources: this.storedResources
+            resources: this.storedResources,
+            addNewResource: this.addNewResource
         };
     },
     methods: {
         setSelectedTab(tab){
             this.selectedTab = tab;
+        },
+        addNewResource(title, description, urlLink) {
+            const newResource = {
+                id: new Date().toISOString(),
+                title: title,
+                description: description,
+                urlLink: urlLink
+
+            }
+            this.storedResources.push(newResource);
+            //switch tab after adding a new resource
+            this.selectedTab = "stored-resources";
         }
     },
     computed: {
