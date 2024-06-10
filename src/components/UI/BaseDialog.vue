@@ -1,22 +1,25 @@
 <template>
-    <div @click="$emit('closeDialog')"></div>
-    <dialog open>
-        <!-- control visibility by adding or removing component from DOM -->
-        <header>
-            <slot name="header">
-                <!-- Default content via props -->
-                <h2>{{ title }}</h2>
-            </slot>
-        </header>
-        <section>
-            <slot></slot>
-        </section>
-        <menu>
-            <slot name="buttonActions">
-                <base-button @click="$emit('closeDialog')">Close</base-button>
-            </slot>
-        </menu>
-    </dialog>
+    <teleport to="body">
+
+        <div @click="$emit('closeDialog')"></div>
+        <dialog open>
+            <!-- control visibility by adding or removing component from DOM -->
+            <header>
+                <slot name="header">
+                    <!-- Default content via props -->
+                    <h2>{{ title }}</h2>
+                </slot>
+            </header>
+            <section>
+                <slot></slot>
+            </section>
+            <menu>
+                <slot name="buttonActions">
+                    <base-button @click="$emit('closeDialog')">Close</base-button>
+                </slot>
+            </menu>
+        </dialog>
+    </teleport>
 </template>
 
 <script>
@@ -28,8 +31,8 @@ export default {
 }
 </script>
 
-<style>
-/* div {
+<style scoped>
+div {
   position: fixed;
   top: 0;
   left: 0;
@@ -80,5 +83,5 @@ menu {
     left: calc(50% - 20rem);
     width: 40rem;
   }
-} */
+}
 </style>
