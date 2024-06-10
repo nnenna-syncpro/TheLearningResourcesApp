@@ -1,8 +1,15 @@
 <template>
-    <button>
+    <button :type="type" :class="mode">
         <slot></slot>
+        <!-- slot provides more flexibility for caption than using props -->
     </button>
 </template>
+<!-- set type of button by binding default type attr to type prop, use mode prop to set CSS class-->
+<script>
+export default {
+    props: ["type", "mode"]
+}
+</script>
 
 <style scoped>
 button {
